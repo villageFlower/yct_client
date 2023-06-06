@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber } from 'antd';
-import Web3 from 'web3';
 import contractABI from '../../assets/yctokenABI.json';
 
 import { ethers } from 'ethers';
@@ -9,8 +8,10 @@ import { ethers } from 'ethers';
 function Home() {
 
     const privateKey = '0944b72c3d92de24b8629ae5f64a2b2ccfa800a2537fb1728781182d61c8dc23';
-    const provider = new ethers.JsonRpcProvider('https://goerli.infura.io/v3/9110a9490de6477184406113ce4854a4');
-    const contractAddress = '0x67dE3200D39C80D8cc6eA1a35b54b5cfC28748c2';
+    // const provider = new ethers.providers.JsonRpcProvider('https://sepolia.infura.io/v3/9110a9490de6477184406113ce4854a4');
+    const provider = new ethers.providers.EtherscanProvider("sepolia", "35248DCBB9EQA84WG1FSSC3376X2DMX2NZ");
+    const contractAddress = '0xF55239dfBB17C5091044121333Ad8dF5bd0Bf91F';
+    const contractAddress2 = '0x33787158F9dAfaf1eFC7A697E01A4486239D6317';//token
     const wallet = new ethers.Wallet(privateKey, provider);
     
 
@@ -31,21 +32,32 @@ function Home() {
                 '0xea5abc4e6660da60a3f9cd1c9c5de8791cadf410004533b9f59ab4e753440eae',
               ]
             }
-          ]
+          ];
 
 
         let params = {
             to: contractAddress,
             from: wallet.address,
             data: data,
-            accesslist: accessList,
+            // accessList: accessList,
+        };
+        let params2 = {
+            to: contractAddress2,
+            from: wallet.address,
+            data: data,
+            // gasPrice: 3000000000,
+            // gasLimit: 40000,
+            // accessList: accessList,
         };
 
         try {
             // const signedTransaction = await wallet.signTransaction(params);
             const transactionResponse = await wallet.sendTransaction(params);
             console.log('Transaction hash:', transactionResponse.hash);
-            alert('Transaction hash:' + transactionResponse.hash);
+            // const transactionResponse2 = await wallet.sendTransaction(params2);
+            
+            // console.log('Transaction2 hash:', transactionResponse2.hash);
+            // alert('Transaction hash:' + transactionResponse.hash);
         } catch (error) {
             alert('Error:' + error.message);
             console.error('Error:', error);
